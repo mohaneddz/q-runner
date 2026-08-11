@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Q-Runner
 
-## Getting Started
+Q-Runner is a deterministic, client-only browser auto-runner with an in-browser level editor and a Q-learning training playground, built with:
 
-First, run the development server:
+- Next.js App Router + TypeScript
+- Tailwind (UI layer only)
+- raw Three.js for game/editor canvas rendering
+- Zustand for editor UI state
+- Zod for level schema validation
+- localForage for browser persistence (levels, drafts)
+- nanoid for IDs
+
+No backend, no physics engine, and no `react-three-fiber` — the simulation core is hand-rolled (fixed-tick game loop, collision, movement) under `src/game/`.
+
+## Status
+
+⚠️ **This repo's git history does not reflect the actual codebase yet.** Only one commit exists (`Initial commit from Create Next App`), and almost the entire game — `src/game/`, `src/components/`, all app routes (`editor`, `play`, `training`), scripts, and public assets — is currently **untracked**. There is no commit-level rollback safety net for any of that code. This should be committed properly as a follow-up; it's out of scope for this README update.
+
+## What's here
+
+- **`/` `/play` `/editor` `/training`** — the four routes that currently exist under `src/app`. `/play` reads a `?level=` query param (not a dynamic `[levelId]` segment) and falls back to a built-in default level (`src/game/level/levelLoader.ts`) when none is saved.
+- **Game core** (`src/game/core`, `entities`, `physics`, `input`, `render`) — fixed-tick `GameLoop`/`GameEngine`, platform/spike/finish entities, collision + movement, canvas renderer, and separate human vs. agent input sources.
+- **Level editor** (`src/app/editor`, `src/components/editor`) — place/delete/drag tools for platforms and spikes on a snapped grid, an inspector panel for editing selected object properties, save-to-local-storage, JSON export/import, and a one-click "Playtest" that saves the current draft and jumps to `/play`.
+- **Training** (`src/app/training`, `src/game/training`) — a from-scratch `QLearningAgent` trained against a `TrainingEnv` wrapping the game core, driven by a `Trainer` that runs batched steps and reports episode/reward/epsilon metrics in a `TrainingPanel`/`MetricsPanel` UI.
+- **Level data** — currently a single hard-coded default level (`DEFAULT_LEVEL` in `levelLoader.ts`) plus a Zod schema (`levelTypes.ts`, validated by `scripts/validate-builtins.mjs`). Levels are persisted via `localForage` (`levelStore.ts`) and can be exported/imported as JSON from the editor.
+
+Not currently present in the code (despite being natural next steps): a procedurally-generated endless mode, multiple built-in levels, multi-select/resize in the editor, and undo/redo.
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Validate the built-in level(s) against the Zod schema:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm validate:levels
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Build / run production:
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm build
+pnpm start
+```
