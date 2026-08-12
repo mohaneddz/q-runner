@@ -4,20 +4,28 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "validate:levels": "node scripts/validate-builtins.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "localforage": "^1.10.0",
+    "lucide-react": "^0.554.0",
     "next": "16.2.1",
+    "nanoid": "^5.1.6",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "three": "^0.181.1",
+    "zod": "^4.1.11",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.181.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
