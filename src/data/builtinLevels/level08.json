@@ -1,0 +1,264 @@
+{
+  "version": 1,
+  "meta": {
+    "id": "level08",
+    "name": "Inversion",
+    "author": "Q-Runner",
+    "createdAt": "2026-08-21T00:00:00.000Z",
+    "updatedAt": "2026-08-21T00:00:00.000Z",
+    "seed": 8849
+  },
+  "settings": {
+    "length": 204,
+    "baseSpeed": 8.8,
+    "startMode": "cube",
+    "startGravity": 1,
+    "theme": "ember",
+    "musicBpm": 128
+  },
+  "objects": [
+    {
+      "id": "o0",
+      "type": "spanPlatform",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "width": 73,
+      "height": 1
+    },
+    {
+      "id": "o1",
+      "type": "connectedPlatformBlock",
+      "x": 16,
+      "y": 1,
+      "rotation": 0,
+      "width": 7,
+      "height": 1
+    },
+    {
+      "id": "o2",
+      "type": "connectedPlatformBlock",
+      "x": 23,
+      "y": 1,
+      "rotation": 0,
+      "width": 7,
+      "height": 2
+    },
+    {
+      "id": "o3",
+      "type": "connectedPlatformBlock",
+      "x": 30,
+      "y": 1,
+      "rotation": 0,
+      "width": 7,
+      "height": 1
+    },
+    {
+      "id": "o4",
+      "type": "spikeDouble",
+      "x": 47,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o5",
+      "type": "spikeMini",
+      "x": 53,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o6",
+      "type": "ceilingBlock",
+      "x": 64,
+      "y": 6,
+      "rotation": 0,
+      "width": 29,
+      "height": 1
+    },
+    {
+      "id": "o7",
+      "type": "shipPortal",
+      "x": 65,
+      "y": 1,
+      "rotation": 0,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "o8",
+      "type": "connectedPlatformBlock",
+      "x": 73,
+      "y": 0,
+      "rotation": 0,
+      "width": 24,
+      "height": 1
+    },
+    {
+      "id": "o9",
+      "type": "gravityUpPortal",
+      "x": 80,
+      "y": 1,
+      "rotation": 0,
+      "width": 1,
+      "height": 5
+    },
+    {
+      "id": "o10",
+      "type": "ceilingBlock",
+      "x": 93,
+      "y": 5,
+      "rotation": 0,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "o11",
+      "type": "connectedPlatformBlock",
+      "x": 97,
+      "y": 0.5,
+      "rotation": 0,
+      "width": 7,
+      "height": 1
+    },
+    {
+      "id": "o12",
+      "type": "ceilingBlock",
+      "x": 97,
+      "y": 5.5,
+      "rotation": 0,
+      "width": 7,
+      "height": 1
+    },
+    {
+      "id": "o13",
+      "type": "connectedPlatformBlock",
+      "x": 104,
+      "y": 1,
+      "rotation": 0,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "o14",
+      "type": "ceilingBlock",
+      "x": 104,
+      "y": 6,
+      "rotation": 0,
+      "width": 24,
+      "height": 1
+    },
+    {
+      "id": "o15",
+      "type": "connectedPlatformBlock",
+      "x": 108,
+      "y": 0,
+      "rotation": 0,
+      "width": 55,
+      "height": 1
+    },
+    {
+      "id": "o16",
+      "type": "gravityDownPortal",
+      "x": 115,
+      "y": 1,
+      "rotation": 0,
+      "width": 1,
+      "height": 5
+    },
+    {
+      "id": "o17",
+      "type": "ceilingBlock",
+      "x": 128,
+      "y": 5.5,
+      "rotation": 0,
+      "width": 21,
+      "height": 1
+    },
+    {
+      "id": "o18",
+      "type": "spikeSingle",
+      "x": 133,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o19",
+      "type": "spikeInverted",
+      "x": 139,
+      "y": 4.5,
+      "rotation": 180
+    },
+    {
+      "id": "o20",
+      "type": "spikeInverted",
+      "x": 145,
+      "y": 4.5,
+      "rotation": 180
+    },
+    {
+      "id": "o21",
+      "type": "ceilingBlock",
+      "x": 149,
+      "y": 6,
+      "rotation": 0,
+      "width": 14,
+      "height": 1
+    },
+    {
+      "id": "o22",
+      "type": "cubePortal",
+      "x": 155,
+      "y": 1,
+      "rotation": 0,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "o23",
+      "type": "spanPlatform",
+      "x": 163,
+      "y": 0,
+      "rotation": 0,
+      "width": 41,
+      "height": 1
+    },
+    {
+      "id": "o24",
+      "type": "spikeSingle",
+      "x": 166,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o25",
+      "type": "spikeMini",
+      "x": 172,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o26",
+      "type": "spikeSingle",
+      "x": 178,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o27",
+      "type": "spikeMini",
+      "x": 184,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o28",
+      "type": "finishGate",
+      "x": 199,
+      "y": 1,
+      "rotation": 0,
+      "width": 1,
+      "height": 4
+    }
+  ]
+}
