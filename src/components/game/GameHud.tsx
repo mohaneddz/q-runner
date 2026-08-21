@@ -1,25 +1,43 @@
+"use client";
+
 import type { Snapshot } from "@/game/core/types";
+import type { LevelData } from "@/game/level/levelSchema";
+import { MuteButton } from "@/components/ui/MuteButton";
+import { ProgressBar } from "@/components/ui/ProgressBar";
 
 interface GameHudProps {
+  level: LevelData;
   snapshot: Snapshot | null;
-  mode: "human" | "agent";
   attempts: number;
-  onModeChange: (mode: "human" | "agent") => void;
+  bestProgress: number;
 }
 
-export function GameHud({ snapshot, mode, attempts, onModeChange }: GameHudProps) {
+const MODE_LABELS = {
+  cube: "Cube",
+  ship: "Ship",
+  ball: "Ball",
+} as const;
+
+export function GameHud({ level, snapshot, attempts, bestProgress }: GameHudProps) {
+  const progress = snapshot?.progress ?? 0;
+  const mode = snapshot?.player.mode ?? level.settings.startMode;
+  const flipped = (snapshot?.player.gravity ?? level.settings.startGravity) === -1;
+
   return (
-    <div className="panel" style={{ padding: 12, display: "flex", gap: 16, flexWrap: "wrap" }}>
-      <strong>Mode</strong>
-      <select value={mode} onChange={(event) => onModeChange(event.target.value as "human" | "agent")}>
-        <option value="human">Human</option>
-        <option value="agent">System Agent</option>
-      </select>
-      <span>Attempts: {attempts}</span>
-      <span>Progress: {snapshot ? `${(snapshot.progress * 100).toFixed(1)}%` : "0%"}</span>
-      <span>Reward: {snapshot ? snapshot.totalReward.toFixed(1) : "0.0"}</span>
-      <span>Obs Dist: {snapshot ? snapshot.observation.distanceToNextObstacle.toFixed(0) : "-"}</span>
-      <span>Vy: {snapshot ? snapshot.observation.verticalVelocity.toFixed(0) : "-"}</span>
+    <div className="panel hud">
+      <div className="hudRow">
+        <div className="hudTitle">
+          <h1 className="hudHeading">{level.meta.name}</h1>
+          <span className="muted">by {level.meta.author}</span>
+        </div>
+        <div className="hudStats">
+          <span className={`badge badge${MODE_LABELS[mode]}`}>{MODE_LABELS[mode]}</span>
+          {flipped ? <span className="badge badgeFlip">Gravity flipped</span> : null}
+          <span className="muted">Attempt {attempts}</span>
+          <MuteButton />
+        </div>
+      </div>
+      <ProgressBar value={progress} best={bestProgress} />
     </div>
   );
 }
