@@ -1,0 +1,345 @@
+{
+  "version": 1,
+  "meta": {
+    "id": "level05",
+    "name": "Crosswire",
+    "author": "Q-Runner",
+    "createdAt": "2026-08-21T00:00:00.000Z",
+    "updatedAt": "2026-08-21T00:00:00.000Z",
+    "seed": 5573
+  },
+  "settings": {
+    "length": 197,
+    "baseSpeed": 8.4,
+    "startMode": "cube",
+    "startGravity": 1,
+    "theme": "circuit",
+    "musicBpm": 128
+  },
+  "objects": [
+    {
+      "id": "o0",
+      "type": "spanPlatform",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "width": 18,
+      "height": 1
+    },
+    {
+      "id": "o1",
+      "type": "spikeSingle",
+      "x": 18,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o2",
+      "type": "spanPlatform",
+      "x": 18,
+      "y": -3,
+      "rotation": 0,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "o3",
+      "type": "spikeSingle",
+      "x": 19,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o4",
+      "type": "spikeSingle",
+      "x": 20,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o5",
+      "type": "spikeSingle",
+      "x": 21,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o6",
+      "type": "spanPlatform",
+      "x": 22,
+      "y": 0,
+      "rotation": 0,
+      "width": 13,
+      "height": 1
+    },
+    {
+      "id": "o7",
+      "type": "spikeSingle",
+      "x": 35,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o8",
+      "type": "spanPlatform",
+      "x": 35,
+      "y": -3,
+      "rotation": 0,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "o9",
+      "type": "spikeSingle",
+      "x": 36,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o10",
+      "type": "spikeSingle",
+      "x": 37,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o11",
+      "type": "spikeSingle",
+      "x": 38,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o12",
+      "type": "spanPlatform",
+      "x": 39,
+      "y": 0,
+      "rotation": 0,
+      "width": 44,
+      "height": 1
+    },
+    {
+      "id": "o13",
+      "type": "spikeSingle",
+      "x": 48,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o14",
+      "type": "spikeDouble",
+      "x": 55,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o15",
+      "type": "spikeDouble",
+      "x": 62,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o16",
+      "type": "ceilingBlock",
+      "x": 74,
+      "y": 6,
+      "rotation": 0,
+      "width": 9,
+      "height": 1
+    },
+    {
+      "id": "o17",
+      "type": "shipPortal",
+      "x": 75,
+      "y": 1,
+      "rotation": 0,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "o18",
+      "type": "connectedPlatformBlock",
+      "x": 83,
+      "y": 0,
+      "rotation": 0,
+      "width": 33,
+      "height": 1
+    },
+    {
+      "id": "o19",
+      "type": "ceilingBlock",
+      "x": 83,
+      "y": 5,
+      "rotation": 0,
+      "width": 19,
+      "height": 1
+    },
+    {
+      "id": "o20",
+      "type": "ceilingBlock",
+      "x": 102,
+      "y": 6,
+      "rotation": 0,
+      "width": 14,
+      "height": 1
+    },
+    {
+      "id": "o21",
+      "type": "cubePortal",
+      "x": 108,
+      "y": 1,
+      "rotation": 0,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "o22",
+      "type": "spanPlatform",
+      "x": 116,
+      "y": 0,
+      "rotation": 0,
+      "width": 6,
+      "height": 1
+    },
+    {
+      "id": "o23",
+      "type": "spikeSingle",
+      "x": 122,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o24",
+      "type": "spanPlatform",
+      "x": 122,
+      "y": -3,
+      "rotation": 0,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "o25",
+      "type": "spikeSingle",
+      "x": 123,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o26",
+      "type": "spikeSingle",
+      "x": 124,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o27",
+      "type": "spikeSingle",
+      "x": 125,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o28",
+      "type": "spanPlatform",
+      "x": 126,
+      "y": 0,
+      "rotation": 0,
+      "width": 22,
+      "height": 1
+    },
+    {
+      "id": "o29",
+      "type": "ceilingBlock",
+      "x": 139,
+      "y": 6,
+      "rotation": 0,
+      "width": 9,
+      "height": 1
+    },
+    {
+      "id": "o30",
+      "type": "shipPortal",
+      "x": 140,
+      "y": 1,
+      "rotation": 0,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "o31",
+      "type": "connectedPlatformBlock",
+      "x": 148,
+      "y": 0,
+      "rotation": 0,
+      "width": 35,
+      "height": 1
+    },
+    {
+      "id": "o32",
+      "type": "ceilingBlock",
+      "x": 148,
+      "y": 5.5,
+      "rotation": 0,
+      "width": 21,
+      "height": 1
+    },
+    {
+      "id": "o33",
+      "type": "spikeSingle",
+      "x": 153,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o34",
+      "type": "spikeInverted",
+      "x": 159,
+      "y": 4.5,
+      "rotation": 180
+    },
+    {
+      "id": "o35",
+      "type": "spikeInverted",
+      "x": 165,
+      "y": 4.5,
+      "rotation": 180
+    },
+    {
+      "id": "o36",
+      "type": "ceilingBlock",
+      "x": 169,
+      "y": 6,
+      "rotation": 0,
+      "width": 14,
+      "height": 1
+    },
+    {
+      "id": "o37",
+      "type": "cubePortal",
+      "x": 175,
+      "y": 1,
+      "rotation": 0,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "o38",
+      "type": "spanPlatform",
+      "x": 183,
+      "y": 0,
+      "rotation": 0,
+      "width": 14,
+      "height": 1
+    },
+    {
+      "id": "o39",
+      "type": "finishGate",
+      "x": 192,
+      "y": 1,
+      "rotation": 0,
+      "width": 1,
+      "height": 4
+    }
+  ]
+}

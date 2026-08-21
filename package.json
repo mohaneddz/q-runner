@@ -4,31 +4,37 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "validate:levels": "node scripts/validate-builtins.mjs",
-    "build": "next build",
+    "generate:levels": "tsx scripts/generateBuiltins.ts",
+    "generate:icons": "tsx scripts/generateIcons.ts",
+    "validate:levels": "tsx scripts/validateBuiltins.ts",
+    "build": "pnpm validate:levels && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "preview": "tsx scripts/renderPreview.ts",
+    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm validate:levels"
   },
   "dependencies": {
     "localforage": "^1.10.0",
     "lucide-react": "^0.554.0",
-    "next": "16.2.1",
     "nanoid": "^5.1.6",
+    "next": "16.2.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "three": "^0.181.1",
     "zod": "^4.1.11",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@napi-rs/canvas": "^1.0.7",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/three": "^0.181.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.12",
     "typescript": "^5"
   }
 }

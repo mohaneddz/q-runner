@@ -1,28 +1,24 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
-import { CANVAS_HEIGHT, CANVAS_WIDTH, GRID_SIZE } from "@/game/core/constants";
-import type { LevelData, LevelObject, LevelObjectType } from "@/game/level/levelTypes";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { snapPoint } from "@/game/editor/grid";
+import { useEditorStore } from "@/game/editor/editorStore";
+import { resolveObject, resolveObjects, type ResolvedObject } from "@/game/level/levelGeometry";
+import type { LevelObject } from "@/game/level/levelSchema";
+import { definitionFor } from "@/game/level/objectCatalog";
+import { EditorRenderer, type Marquee } from "@/game/render/EditorRenderer";
 
-interface EditorCanvasProps {
-  level: LevelData;
-  tool: "place" | "delete" | "drag";
-  placeType: LevelObjectType;
-  selectedId: string | null;
-  onSelect: (id: string | null) => void;
-  onPlace: (x: number, y: number) => void;
-  onDelete: (id: string) => void;
-  onMove: (id: string, x: number, y: number) => void;
-}
+type DragMode = "none" | "pan" | "move" | "marquee" | "paint" | "erase";
 
-function findObject(level: LevelData, worldX: number, worldY: number): LevelObject | null {
-  for (let i = level.objects.length - 1; i >= 0; i -= 1) {
-    const object = level.objects[i];
+function hitTest(objects: ResolvedObject[], worldX: number, worldY: number): ResolvedObject | null {
+  // Back to front, so the most recently drawn object wins a click.
+  for (let i = objects.length - 1; i >= 0; i -= 1) {
+    const object = objects[i];
     if (
       worldX >= object.x &&
-      worldX <= object.x + object.width &&
+      worldX <= object.right &&
       worldY >= object.y &&
-      worldY <= object.y + object.height
+      worldY <= object.top
     ) {
       return object;
     }
@@ -30,131 +26,352 @@ function findObject(level: LevelData, worldX: number, worldY: number): LevelObje
   return null;
 }
 
-export function EditorCanvas({
-  level,
-  tool,
-  placeType,
-  selectedId,
-  onSelect,
-  onPlace,
-  onDelete,
-  onMove,
-}: EditorCanvasProps) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const dragIdRef = useRef<string | null>(null);
-
-  const objectsKey = useMemo(
-    () => level.objects.map((object) => `${object.id}:${object.x}:${object.y}`).join("|"),
-    [level.objects],
+function intersects(object: ResolvedObject, marquee: Marquee): boolean {
+  return (
+    object.x < marquee.x + marquee.width &&
+    object.right > marquee.x &&
+    object.y < marquee.y + marquee.height &&
+    object.top > marquee.y
   );
+}
 
+export function EditorCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const rendererRef = useRef<EditorRenderer | null>(null);
+
+  const dragMode = useRef<DragMode>("none");
+  const dragOrigin = useRef({ x: 0, y: 0 });
+  const dragLast = useRef({ x: 0, y: 0 });
+  const paintedCells = useRef(new Set<string>());
+  const spaceHeld = useRef(false);
+
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [marquee, setMarquee] = useState<Marquee | null>(null);
+  const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null);
+
+  // Mirrors of transient state the render loop reads without a re-render.
+  const hoveredRef = useRef<string | null>(null);
+  const marqueeRef = useRef<Marquee | null>(null);
+  const cursorRef = useRef<{ x: number; y: number } | null>(null);
+  useEffect(() => {
+    hoveredRef.current = hoveredId;
+    marqueeRef.current = marquee;
+    cursorRef.current = cursor;
+  });
+
+  const toWorld = useCallback((event: { clientX: number; clientY: number }) => {
+    const canvas = canvasRef.current;
+    const renderer = rendererRef.current;
+    if (!canvas || !renderer) {
+      return null;
+    }
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: renderer.toWorldX(event.clientX - rect.left),
+      y: renderer.toWorldY(event.clientY - rect.top),
+    };
+  }, []);
+
+  // Render loop. Reading the store per frame keeps the canvas in step with the
+  // sidebar without re-rendering React on every pointer move.
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) {
-      return;
-    }
-    const ctx = canvas.getContext("2d");
-    if (!ctx) {
+    const container = containerRef.current;
+    if (!canvas || !container) {
       return;
     }
 
-    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    ctx.fillStyle = "#070b16";
-    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    const renderer = new EditorRenderer(canvas);
+    rendererRef.current = renderer;
 
-    ctx.strokeStyle = "rgba(32,241,255,0.14)";
-    for (let x = 0; x < CANVAS_WIDTH; x += GRID_SIZE) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, CANVAS_HEIGHT);
-      ctx.stroke();
-    }
-    for (let y = 0; y < CANVAS_HEIGHT; y += GRID_SIZE) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(CANVAS_WIDTH, y);
-      ctx.stroke();
-    }
+    const applySize = () => {
+      const rect = container.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        renderer.resize(rect.width, rect.height, window.devicePixelRatio || 1);
+      }
+    };
+    applySize();
+    const observer = new ResizeObserver(applySize);
+    observer.observe(container);
 
-    for (const object of level.objects) {
-      if (object.type === "platform") {
-        ctx.fillStyle = "#16d3ff";
-        ctx.fillRect(object.x, object.y, object.width, object.height);
-      } else {
-        ctx.fillStyle = "#ff4dbf";
-        ctx.beginPath();
-        ctx.moveTo(object.x, object.y + object.height);
-        ctx.lineTo(object.x + object.width, object.y + object.height);
-        ctx.lineTo(object.x + object.width / 2, object.y);
-        ctx.closePath();
-        ctx.fill();
+    let raf = 0;
+    const frame = () => {
+      const state = useEditorStore.getState();
+      const objects = resolveObjects(state.level.objects);
+
+      let preview: ResolvedObject | null = null;
+      if (state.tool === "place" && cursorRef.current) {
+        const definition = definitionFor(state.placeType);
+        const snapped = snapPoint(cursorRef.current.x, cursorRef.current.y, state.snap);
+        const ghost: LevelObject = {
+          id: "preview",
+          type: state.placeType,
+          x: snapped.x,
+          y: snapped.y,
+          rotation: 0,
+          width: definition.width,
+          height: definition.height,
+        };
+        preview = resolveObject(ghost);
       }
 
-      if (object.id === selectedId) {
-        ctx.strokeStyle = "#81ff6f";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(object.x - 2, object.y - 2, object.width + 4, object.height + 4);
+      renderer.render({
+        level: state.level,
+        objects,
+        selectedIds: state.selectedIds,
+        hoveredId: hoveredRef.current,
+        marquee: marqueeRef.current,
+        camera: state.camera,
+        preview,
+      });
+      raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      observer.disconnect();
+      rendererRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) {
+        return;
+      }
+
+      const store = useEditorStore.getState();
+
+      if (event.code === "Space") {
+        spaceHeld.current = true;
+        event.preventDefault();
+        return;
+      }
+      if (event.key === "Delete" || event.key === "Backspace") {
+        event.preventDefault();
+        store.deleteSelected();
+        return;
+      }
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") {
+        event.preventDefault();
+        if (event.shiftKey) {
+          store.redo();
+        } else {
+          store.undo();
+        }
+        return;
+      }
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "y") {
+        event.preventDefault();
+        store.redo();
+        return;
+      }
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "d") {
+        event.preventDefault();
+        store.duplicateSelected();
+        return;
+      }
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "a") {
+        event.preventDefault();
+        store.selectAll();
+        return;
+      }
+
+      const step = event.shiftKey ? 1 : store.snap;
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        store.nudgeSelected(-step, 0);
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        store.nudgeSelected(step, 0);
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        store.nudgeSelected(0, step);
+      } else if (event.key === "ArrowDown") {
+        event.preventDefault();
+        store.nudgeSelected(0, -step);
+      }
+    };
+
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        spaceHeld.current = false;
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+    };
+  }, []);
+
+  const onPointerDown = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    const world = toWorld(event);
+    if (!world) {
+      return;
+    }
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragOrigin.current = world;
+    dragLast.current = world;
+
+    const store = useEditorStore.getState();
+
+    if (event.button === 1 || spaceHeld.current) {
+      dragMode.current = "pan";
+      return;
+    }
+
+    const objects = resolveObjects(store.level.objects);
+    const hit = hitTest(objects, world.x, world.y);
+
+    if (store.tool === "erase") {
+      dragMode.current = "erase";
+      if (hit) {
+        store.eraseAt(hit.id);
+      }
+      return;
+    }
+
+    if (store.tool === "place") {
+      dragMode.current = "paint";
+      paintedCells.current.clear();
+      const snapped = snapPoint(world.x, world.y, store.snap);
+      paintedCells.current.add(`${snapped.x}:${snapped.y}`);
+      store.placeAt(world.x, world.y);
+      return;
+    }
+
+    if (hit) {
+      if (event.shiftKey) {
+        store.toggleSelected(hit.id);
+      } else if (!store.selectedIds.includes(hit.id)) {
+        store.select([hit.id]);
+      }
+      dragMode.current = "move";
+      store.beginDrag();
+      return;
+    }
+
+    if (!event.shiftKey) {
+      store.clearSelection();
+    }
+    dragMode.current = "marquee";
+    setMarquee({ x: world.x, y: world.y, width: 0, height: 0 });
+  };
+
+  const onPointerMove = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    const world = toWorld(event);
+    if (!world) {
+      return;
+    }
+    setCursor(world);
+
+    const store = useEditorStore.getState();
+    const mode = dragMode.current;
+
+    if (mode === "none") {
+      const objects = resolveObjects(store.level.objects);
+      setHoveredId(hitTest(objects, world.x, world.y)?.id ?? null);
+      return;
+    }
+
+    if (mode === "pan") {
+      store.panBy(dragLast.current.x - world.x, dragLast.current.y - world.y);
+      // Panning moves the world under the cursor, so re-read rather than
+      // accumulating drift from the pre-pan coordinate.
+      const updated = toWorld(event);
+      dragLast.current = updated ?? world;
+      return;
+    }
+
+    if (mode === "move") {
+      store.moveSelectedBy(world.x - dragLast.current.x, world.y - dragLast.current.y);
+      dragLast.current = world;
+      return;
+    }
+
+    if (mode === "paint") {
+      const snapped = snapPoint(world.x, world.y, store.snap);
+      const key = `${snapped.x}:${snapped.y}`;
+      if (!paintedCells.current.has(key)) {
+        paintedCells.current.add(key);
+        store.placeAt(world.x, world.y);
+      }
+      return;
+    }
+
+    if (mode === "erase") {
+      const objects = resolveObjects(store.level.objects);
+      const hit = hitTest(objects, world.x, world.y);
+      if (hit) {
+        store.eraseAt(hit.id);
+      }
+      return;
+    }
+
+    if (mode === "marquee") {
+      setMarquee({
+        x: Math.min(dragOrigin.current.x, world.x),
+        y: Math.min(dragOrigin.current.y, world.y),
+        width: Math.abs(world.x - dragOrigin.current.x),
+        height: Math.abs(world.y - dragOrigin.current.y),
+      });
+    }
+  };
+
+  const onPointerUp = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    const store = useEditorStore.getState();
+
+    if (dragMode.current === "marquee" && marqueeRef.current) {
+      const box = marqueeRef.current;
+      if (box.width > 0.1 || box.height > 0.1) {
+        const inside = resolveObjects(store.level.objects)
+          .filter((object) => intersects(object, box))
+          .map((object) => object.id);
+        store.select(
+          event.shiftKey ? [...new Set([...store.selectedIds, ...inside])] : inside,
+        );
       }
     }
-  }, [objectsKey, selectedId, level]);
+
+    if (dragMode.current === "move") {
+      store.endDrag();
+    }
+
+    dragMode.current = "none";
+    setMarquee(null);
+    paintedCells.current.clear();
+  };
+
+  const onWheel = (event: React.WheelEvent<HTMLCanvasElement>) => {
+    const world = toWorld(event);
+    if (!world) {
+      return;
+    }
+    const factor = event.deltaY < 0 ? 1.12 : 1 / 1.12;
+    useEditorStore.getState().zoomAt(factor, world.x, world.y);
+  };
 
   return (
-    <canvas
-      ref={canvasRef}
-      width={CANVAS_WIDTH}
-      height={CANVAS_HEIGHT}
-      style={{ width: "100%", maxWidth: 1100, borderRadius: 12, border: "1px solid rgba(255,255,255,0.15)" }}
-      onMouseDown={(event) => {
-        const canvas = canvasRef.current;
-        if (!canvas) {
-          return;
-        }
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = CANVAS_WIDTH / rect.width;
-        const scaleY = CANVAS_HEIGHT / rect.height;
-        const worldX = (event.clientX - rect.left) * scaleX;
-        const worldY = (event.clientY - rect.top) * scaleY;
-
-        const hit = findObject(level, worldX, worldY);
-
-        if (tool === "place") {
-          onPlace(worldX, worldY - (placeType === "spike" ? GRID_SIZE : 0));
-          return;
-        }
-
-        if (tool === "delete") {
-          if (hit) {
-            onDelete(hit.id);
-          }
-          return;
-        }
-
-        if (tool === "drag") {
-          dragIdRef.current = hit?.id ?? null;
-          onSelect(hit?.id ?? null);
-        }
-      }}
-      onMouseMove={(event) => {
-        if (tool !== "drag" || !dragIdRef.current) {
-          return;
-        }
-        const canvas = canvasRef.current;
-        if (!canvas) {
-          return;
-        }
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = CANVAS_WIDTH / rect.width;
-        const scaleY = CANVAS_HEIGHT / rect.height;
-        const worldX = (event.clientX - rect.left) * scaleX;
-        const worldY = (event.clientY - rect.top) * scaleY;
-        onMove(dragIdRef.current, worldX, worldY);
-      }}
-      onMouseUp={() => {
-        dragIdRef.current = null;
-      }}
-      onMouseLeave={() => {
-        dragIdRef.current = null;
-      }}
-    />
+    <div ref={containerRef} className="editorCanvasWrap">
+      <canvas
+        ref={canvasRef}
+        className="editorCanvas"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerLeave={() => {
+          setHoveredId(null);
+          setCursor(null);
+        }}
+        onWheel={onWheel}
+        onContextMenu={(event) => event.preventDefault()}
+      />
+    </div>
   );
 }

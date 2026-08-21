@@ -1,20 +1,22 @@
-import type { Snapshot } from "@/game/core/types";
+"use client";
+
+import type { ReactNode } from "react";
 
 interface GameOverlayProps {
-  snapshot: Snapshot | null;
+  title: string;
+  detail?: ReactNode;
+  actions?: ReactNode;
+  tone?: "win" | "neutral";
 }
 
-export function GameOverlay({ snapshot }: GameOverlayProps) {
-  if (!snapshot || snapshot.status !== "finished") {
-    return null;
-  }
-
+export function GameOverlay({ title, detail, actions, tone = "neutral" }: GameOverlayProps) {
   return (
-    <div
-      className="panel"
-      style={{ position: "absolute", top: 24, right: 24, padding: 12, borderColor: "rgba(129,255,111,0.7)" }}
-    >
-      Level finished
+    <div className="overlay">
+      <div className={`panel overlayCard ${tone === "win" ? "overlayWin" : ""}`}>
+        <h2 className="overlayTitle">{title}</h2>
+        {detail ? <div className="overlayDetail">{detail}</div> : null}
+        {actions ? <div className="overlayActions">{actions}</div> : null}
+      </div>
     </div>
   );
 }

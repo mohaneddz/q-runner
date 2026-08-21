@@ -1,0 +1,152 @@
+[
+  {
+    "id": "level01",
+    "name": "First Light",
+    "author": "Q-Runner",
+    "theme": "neon",
+    "length": 135,
+    "baseSpeed": 8,
+    "objectCount": 13,
+    "tier": 1,
+    "modes": [
+      "cube"
+    ],
+    "hasGravityFlips": false
+  },
+  {
+    "id": "level02",
+    "name": "Static Drift",
+    "author": "Q-Runner",
+    "theme": "neon",
+    "length": 147,
+    "baseSpeed": 8,
+    "objectCount": 25,
+    "tier": 2,
+    "modes": [
+      "cube"
+    ],
+    "hasGravityFlips": false
+  },
+  {
+    "id": "level03",
+    "name": "Overpass",
+    "author": "Q-Runner",
+    "theme": "circuit",
+    "length": 153,
+    "baseSpeed": 8.2,
+    "objectCount": 47,
+    "tier": 3,
+    "modes": [
+      "cube"
+    ],
+    "hasGravityFlips": false
+  },
+  {
+    "id": "level04",
+    "name": "Ion Wake",
+    "author": "Q-Runner",
+    "theme": "sunset",
+    "length": 168,
+    "baseSpeed": 8.2,
+    "objectCount": 41,
+    "tier": 4,
+    "modes": [
+      "cube",
+      "ship"
+    ],
+    "hasGravityFlips": false
+  },
+  {
+    "id": "level05",
+    "name": "Crosswire",
+    "author": "Q-Runner",
+    "theme": "circuit",
+    "length": 197,
+    "baseSpeed": 8.4,
+    "objectCount": 40,
+    "tier": 5,
+    "modes": [
+      "cube",
+      "ship"
+    ],
+    "hasGravityFlips": false
+  },
+  {
+    "id": "level06",
+    "name": "Nightfall",
+    "author": "Q-Runner",
+    "theme": "void",
+    "length": 205,
+    "baseSpeed": 8.6,
+    "objectCount": 42,
+    "tier": 6,
+    "modes": [
+      "cube",
+      "ball"
+    ],
+    "hasGravityFlips": false
+  },
+  {
+    "id": "level07",
+    "name": "Rollcage",
+    "author": "Q-Runner",
+    "theme": "void",
+    "length": 200,
+    "baseSpeed": 8.6,
+    "objectCount": 64,
+    "tier": 7,
+    "modes": [
+      "cube",
+      "ship",
+      "ball"
+    ],
+    "hasGravityFlips": false
+  },
+  {
+    "id": "level08",
+    "name": "Inversion",
+    "author": "Q-Runner",
+    "theme": "ember",
+    "length": 204,
+    "baseSpeed": 8.8,
+    "objectCount": 29,
+    "tier": 8,
+    "modes": [
+      "cube",
+      "ship"
+    ],
+    "hasGravityFlips": true
+  },
+  {
+    "id": "level09",
+    "name": "Redline",
+    "author": "Q-Runner",
+    "theme": "ember",
+    "length": 249,
+    "baseSpeed": 9.2,
+    "objectCount": 86,
+    "tier": 9,
+    "modes": [
+      "cube",
+      "ship",
+      "ball"
+    ],
+    "hasGravityFlips": true
+  },
+  {
+    "id": "level10",
+    "name": "Terminal Velocity",
+    "author": "Q-Runner",
+    "theme": "void",
+    "length": 269,
+    "baseSpeed": 9.5,
+    "objectCount": 84,
+    "tier": 10,
+    "modes": [
+      "cube",
+      "ship",
+      "ball"
+    ],
+    "hasGravityFlips": true
+  }
+]

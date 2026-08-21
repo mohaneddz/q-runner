@@ -1,18 +1,13 @@
-import Link from "next/link";
-import { TrainingPanel } from "@/components/training/TrainingPanel";
+import type { Metadata } from "next";
+import { TrainingClient } from "@/components/training/TrainingClient";
+
+export const metadata: Metadata = {
+  title: "Training",
+  description:
+    "Train a tabular Q-learning agent on Q-Runner levels in your browser and watch what it learned.",
+  alternates: { canonical: "/training" },
+};
 
 export default function TrainingPage() {
-  return (
-    <main className="app-shell" style={{ padding: "20px 0", display: "grid", gap: 12 }}>
-      <div style={{ display: "flex", gap: 12, alignItems: "center", justifyContent: "space-between" }}>
-        <h1 style={{ margin: 0 }}>Training</h1>
-        <div style={{ display: "flex", gap: 10 }}>
-          <Link href="/" className="btn">Home</Link>
-          <Link href="/play" className="btn">Play</Link>
-          <Link href="/editor" className="btn">Editor</Link>
-        </div>
-      </div>
-      <TrainingPanel />
-    </main>
-  );
+  return <TrainingClient />;
 }
