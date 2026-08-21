@@ -1,30 +1,43 @@
 # Q-Runner
 
-Q-Runner is a deterministic, client-only browser auto-runner with an in-browser level editor and a Q-learning training playground, built with:
+A deterministic browser auto-runner with cube, ship and ball modes, a level editor, an endless
+mode and an in-browser Q-learning agent. No backend, no physics engine, no game framework — the
+simulation is hand-rolled and runs entirely client-side.
 
-- Next.js App Router + TypeScript
-- Tailwind (UI layer only)
-- raw Three.js for game/editor canvas rendering
-- Zustand for editor UI state
-- Zod for level schema validation
-- localForage for browser persistence (levels, drafts)
-- nanoid for IDs
+Built with Next.js (App Router) + TypeScript, Zod for the level schema, Zustand for editor state,
+localForage for persistence, and a plain 2D canvas for rendering.
 
-No backend, no physics engine, and no `react-three-fiber` — the simulation core is hand-rolled (fixed-tick game loop, collision, movement) under `src/game/`.
+## The idea
 
-## Status
+A fixed 120Hz simulation lives in one pure step function. The game loop, the training
+environment and a reachability solver all call that same function, which is what makes the
+central claim hold: **a level cannot ship unless the solver has proved it clearable.**
 
-⚠️ **This repo's git history does not reflect the actual codebase yet.** Only one commit exists (`Initial commit from Create Next App`), and almost the entire game — `src/game/`, `src/components/`, all app routes (`editor`, `play`, `training`), scripts, and public assets — is currently **untracked**. There is no commit-level rollback safety net for any of that code. This should be committed properly as a follow-up; it's out of scope for this README update.
+The solver is allowed to change its input only once every six ticks — a 50ms grid. So "solvable"
+means solvable with roughly human timing slack, not frame-perfectly. `pnpm build` runs it over
+all ten built-in levels and fails the build on any rejection.
 
 ## What's here
 
-- **`/` `/play` `/editor` `/training`** — the four routes that currently exist under `src/app`. `/play` reads a `?level=` query param (not a dynamic `[levelId]` segment) and falls back to a built-in default level (`src/game/level/levelLoader.ts`) when none is saved.
-- **Game core** (`src/game/core`, `entities`, `physics`, `input`, `render`) — fixed-tick `GameLoop`/`GameEngine`, platform/spike/finish entities, collision + movement, canvas renderer, and separate human vs. agent input sources.
-- **Level editor** (`src/app/editor`, `src/components/editor`) — place/delete/drag tools for platforms and spikes on a snapped grid, an inspector panel for editing selected object properties, save-to-local-storage, JSON export/import, and a one-click "Playtest" that saves the current draft and jumps to `/play`.
-- **Training** (`src/app/training`, `src/game/training`) — a from-scratch `QLearningAgent` trained against a `TrainingEnv` wrapping the game core, driven by a `Trainer` that runs batched steps and reports episode/reward/epsilon metrics in a `TrainingPanel`/`MetricsPanel` UI.
-- **Level data** — currently a single hard-coded default level (`DEFAULT_LEVEL` in `levelLoader.ts`) plus a Zod schema (`levelTypes.ts`, validated by `scripts/validate-builtins.mjs`). Levels are persisted via `localForage` (`levelStore.ts`) and can be exported/imported as JSON from the editor.
+- **`/levels`** — the ten built-in levels plus anything you have built, with best progress and
+  clear state per level.
+- **`/play`** — the game. Hold to jump, fly or flip depending on the mode. You can also watch a
+  scripted baseline bot, or watch the solver's own winning route replayed.
+- **`/editor`** — pan/zoom canvas, place, erase, marquee multi-select, drag, snapping, undo/redo,
+  an inspector for object and level settings, JSON import/export, and a **Check** button that
+  runs the level through the same solver the built-in levels pass.
+- **`/endless`** — stages generated on the fly and rejected unless the solver can still cross
+  them. Difficulty and speed climb per stage. The next stage is built while you play the current
+  one, and a run is reproducible from its seed (`?seed=…`).
+- **`/training`** — a tabular Q-learning agent training against the same engine, with a learning
+  curve, throughput and state-coverage metrics, and a viewer that runs the greedy policy. Agents
+  are saved per level.
 
-Not currently present in the code (despite being natural next steps): a procedurally-generated endless mode, multiple built-in levels, multi-select/resize in the editor, and undo/redo.
+### Game objects
+
+Platforms (tile, span, block, floating, ceiling), spikes (single, double, triple, tall, mini,
+inverted), yellow and pink pads and orbs, cube/ship/ball portals, gravity portals, and a finish
+gate. Hazards use a hitbox smaller than the drawn spike so clipping a corner is survivable.
 
 ## Setup
 
@@ -33,15 +46,48 @@ pnpm install
 pnpm dev
 ```
 
-Validate the built-in level(s) against the Zod schema:
+## Scripts
 
-```bash
-pnpm validate:levels
-```
+| Command | What it does |
+| --- | --- |
+| `pnpm dev` | Dev server |
+| `pnpm build` | Validates every built-in level, then builds |
+| `pnpm check` | Typecheck, lint, tests, level validation |
+| `pnpm test` | 95 tests via `node:test` |
+| `pnpm validate:levels` | Solve every built-in level end to end |
+| `pnpm generate:levels` | Regenerate the ten built-in levels (deterministic per seed) |
+| `pnpm generate:icons` | Redraw favicons and the social card |
+| `pnpm preview [level] [ticks…]` | Render frames of a level to PNG via a headless canvas |
 
-Build / run production:
+`pnpm preview` replays a solved route and writes frames to `previews/`. It is a visual smoke test
+for the renderer that does not need a browser.
 
-```bash
-pnpm build
-pnpm start
-```
+## Level format
+
+Levels are version-1 JSON validated by a Zod schema (`src/game/level/levelSchema.ts`), in world
+units rather than pixels — the same unit the editor grid, the renderer and the solver all use.
+The ten built-in levels live in `src/data/builtinLevels/` and are generated, not hand-placed:
+chunks are appended only if a beam of surviving states can still cross them.
+
+Regenerating is deterministic. Object ids are positional and the authoring timestamp is pinned,
+so `pnpm generate:levels` twice produces byte-identical files.
+
+## Tests
+
+`pnpm test` covers the simulation, the solver, generation, the editor store and the renderer.
+The one that matters most replays the solver's own winning route through the real `GameEngine`
+for each shipped level and asserts it finishes — if the engine and the solver ever drift apart,
+"validated" quietly stops meaning anything.
+
+## Known limitations
+
+- **Progress and levels are per-browser.** Everything is in IndexedDB via localForage. There is
+  no account, no sync, and clearing site data loses saved levels.
+- **Landscape only on mobile.** The game is a 16:9 canvas and reads badly in portrait.
+- **The trained agent is a demo, not a solver.** A tabular Q-table over a discretised state does
+  learn to clear the early levels, but the late ones need mode-specific timing it cannot
+  represent. The reachability solver is the thing that actually proves a level clearable.
+- **Rotation is presentation-only.** Objects can be rotated for looks; collision stays
+  axis-aligned, which is what the solver assumes.
+- **No music.** There are sound effects for jump, death, orbs and portals; `musicBpm` is carried
+  in the level format but nothing reads it yet.
