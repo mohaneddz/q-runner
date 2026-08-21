@@ -1,0 +1,372 @@
+{
+  "version": 1,
+  "meta": {
+    "id": "level03",
+    "name": "Overpass",
+    "author": "Q-Runner",
+    "createdAt": "2026-08-21T00:00:00.000Z",
+    "updatedAt": "2026-08-21T00:00:00.000Z",
+    "seed": 3359
+  },
+  "settings": {
+    "length": 153,
+    "baseSpeed": 8.2,
+    "startMode": "cube",
+    "startGravity": 1,
+    "theme": "circuit",
+    "musicBpm": 128
+  },
+  "objects": [
+    {
+      "id": "o0",
+      "type": "spanPlatform",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "width": 52,
+      "height": 1
+    },
+    {
+      "id": "o1",
+      "type": "spikeDouble",
+      "x": 15,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o2",
+      "type": "spikeSingle",
+      "x": 22,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o3",
+      "type": "spikeMini",
+      "x": 32,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o4",
+      "type": "spikeSingle",
+      "x": 39,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o5",
+      "type": "spikeSingle",
+      "x": 52,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o6",
+      "type": "spanPlatform",
+      "x": 52,
+      "y": -3,
+      "rotation": 0,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "o7",
+      "type": "spikeSingle",
+      "x": 53,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o8",
+      "type": "spikeSingle",
+      "x": 54,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o9",
+      "type": "spikeSingle",
+      "x": 55,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o10",
+      "type": "spanPlatform",
+      "x": 56,
+      "y": 0,
+      "rotation": 0,
+      "width": 12,
+      "height": 1
+    },
+    {
+      "id": "o11",
+      "type": "spikeSingle",
+      "x": 68,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o12",
+      "type": "spanPlatform",
+      "x": 68,
+      "y": -3,
+      "rotation": 0,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "o13",
+      "type": "spikeSingle",
+      "x": 69,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o14",
+      "type": "spikeSingle",
+      "x": 70,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o15",
+      "type": "spikeSingle",
+      "x": 71,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o16",
+      "type": "spanPlatform",
+      "x": 72,
+      "y": 0,
+      "rotation": 0,
+      "width": 38,
+      "height": 1
+    },
+    {
+      "id": "o17",
+      "type": "spikeSingle",
+      "x": 84,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o18",
+      "type": "spikeDouble",
+      "x": 91,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o19",
+      "type": "spikeSingle",
+      "x": 98,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o20",
+      "type": "spikeSingle",
+      "x": 110,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o21",
+      "type": "spanPlatform",
+      "x": 110,
+      "y": -3,
+      "rotation": 0,
+      "width": 21,
+      "height": 1
+    },
+    {
+      "id": "o22",
+      "type": "spikeSingle",
+      "x": 111,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o23",
+      "type": "floatingPlatformBlock",
+      "x": 111,
+      "y": 2,
+      "rotation": 0,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "o24",
+      "type": "spikeSingle",
+      "x": 112,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o25",
+      "type": "spikeSingle",
+      "x": 113,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o26",
+      "type": "spikeSingle",
+      "x": 114,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o27",
+      "type": "spikeSingle",
+      "x": 115,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o28",
+      "type": "spikeSingle",
+      "x": 116,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o29",
+      "type": "spikeSingle",
+      "x": 117,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o30",
+      "type": "spikeSingle",
+      "x": 118,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o31",
+      "type": "floatingPlatformBlock",
+      "x": 118,
+      "y": 2,
+      "rotation": 0,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "o32",
+      "type": "spikeSingle",
+      "x": 119,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o33",
+      "type": "spikeSingle",
+      "x": 120,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o34",
+      "type": "spikeSingle",
+      "x": 121,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o35",
+      "type": "spikeSingle",
+      "x": 122,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o36",
+      "type": "spikeSingle",
+      "x": 123,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o37",
+      "type": "spikeSingle",
+      "x": 124,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o38",
+      "type": "spikeSingle",
+      "x": 125,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o39",
+      "type": "floatingPlatformBlock",
+      "x": 125,
+      "y": 3,
+      "rotation": 0,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "o40",
+      "type": "spikeSingle",
+      "x": 126,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o41",
+      "type": "spikeSingle",
+      "x": 127,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o42",
+      "type": "spikeSingle",
+      "x": 128,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o43",
+      "type": "spikeSingle",
+      "x": 129,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o44",
+      "type": "spikeSingle",
+      "x": 130,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o45",
+      "type": "spanPlatform",
+      "x": 131,
+      "y": 0,
+      "rotation": 0,
+      "width": 22,
+      "height": 1
+    },
+    {
+      "id": "o46",
+      "type": "finishGate",
+      "x": 148,
+      "y": 1,
+      "rotation": 0,
+      "width": 1,
+      "height": 4
+    }
+  ]
+}
