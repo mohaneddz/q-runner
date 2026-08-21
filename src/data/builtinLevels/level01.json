@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "meta": {
+    "id": "level01",
+    "name": "First Light",
+    "author": "Q-Runner",
+    "createdAt": "2026-08-21T00:00:00.000Z",
+    "updatedAt": "2026-08-21T00:00:00.000Z",
+    "seed": 1017
+  },
+  "settings": {
+    "length": 135,
+    "baseSpeed": 8,
+    "startMode": "cube",
+    "startGravity": 1,
+    "theme": "neon",
+    "musicBpm": 128
+  },
+  "objects": [
+    {
+      "id": "o0",
+      "type": "spanPlatform",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "width": 135,
+      "height": 1
+    },
+    {
+      "id": "o1",
+      "type": "spikeSingle",
+      "x": 24,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o2",
+      "type": "spikeSingle",
+      "x": 32,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o3",
+      "type": "spikeSingle",
+      "x": 43,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o4",
+      "type": "spikeSingle",
+      "x": 51,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o5",
+      "type": "spikeSingle",
+      "x": 59,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o6",
+      "type": "spikeSingle",
+      "x": 70,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o7",
+      "type": "spikeSingle",
+      "x": 78,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o8",
+      "type": "spikeSingle",
+      "x": 86,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o9",
+      "type": "spikeDouble",
+      "x": 97,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o10",
+      "type": "spikeSingle",
+      "x": 105,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o11",
+      "type": "spikeSingle",
+      "x": 113,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o12",
+      "type": "finishGate",
+      "x": 130,
+      "y": 1,
+      "rotation": 0,
+      "width": 1,
+      "height": 4
+    }
+  ]
+}
