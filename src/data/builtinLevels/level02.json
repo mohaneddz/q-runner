@@ -1,0 +1,212 @@
+{
+  "version": 1,
+  "meta": {
+    "id": "level02",
+    "name": "Static Drift",
+    "author": "Q-Runner",
+    "createdAt": "2026-08-21T00:00:00.000Z",
+    "updatedAt": "2026-08-21T00:00:00.000Z",
+    "seed": 2281
+  },
+  "settings": {
+    "length": 147,
+    "baseSpeed": 8,
+    "startMode": "cube",
+    "startGravity": 1,
+    "theme": "neon",
+    "musicBpm": 128
+  },
+  "objects": [
+    {
+      "id": "o0",
+      "type": "spanPlatform",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "width": 46,
+      "height": 1
+    },
+    {
+      "id": "o1",
+      "type": "spikeSingle",
+      "x": 24,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o2",
+      "type": "spikeSingle",
+      "x": 32,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o3",
+      "type": "spikeSingle",
+      "x": 46,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o4",
+      "type": "spanPlatform",
+      "x": 46,
+      "y": -3,
+      "rotation": 0,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "o5",
+      "type": "spikeSingle",
+      "x": 47,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o6",
+      "type": "spikeSingle",
+      "x": 48,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o7",
+      "type": "spanPlatform",
+      "x": 49,
+      "y": 0,
+      "rotation": 0,
+      "width": 15,
+      "height": 1
+    },
+    {
+      "id": "o8",
+      "type": "spikeSingle",
+      "x": 64,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o9",
+      "type": "spanPlatform",
+      "x": 64,
+      "y": -3,
+      "rotation": 0,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "o10",
+      "type": "spikeSingle",
+      "x": 65,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o11",
+      "type": "spikeSingle",
+      "x": 66,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o12",
+      "type": "spanPlatform",
+      "x": 67,
+      "y": 0,
+      "rotation": 0,
+      "width": 38,
+      "height": 1
+    },
+    {
+      "id": "o13",
+      "type": "spikeSingle",
+      "x": 76,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o14",
+      "type": "spikeMini",
+      "x": 83,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o15",
+      "type": "spikeSingle",
+      "x": 90,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o16",
+      "type": "spikeSingle",
+      "x": 105,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o17",
+      "type": "spanPlatform",
+      "x": 105,
+      "y": -3,
+      "rotation": 0,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "o18",
+      "type": "spikeSingle",
+      "x": 106,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o19",
+      "type": "spikeSingle",
+      "x": 107,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o20",
+      "type": "spikeSingle",
+      "x": 108,
+      "y": -2,
+      "rotation": 0
+    },
+    {
+      "id": "o21",
+      "type": "spanPlatform",
+      "x": 109,
+      "y": 0,
+      "rotation": 0,
+      "width": 38,
+      "height": 1
+    },
+    {
+      "id": "o22",
+      "type": "spikeDouble",
+      "x": 119,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o23",
+      "type": "spikeDouble",
+      "x": 126,
+      "y": 1,
+      "rotation": 0
+    },
+    {
+      "id": "o24",
+      "type": "finishGate",
+      "x": 142,
+      "y": 1,
+      "rotation": 0,
+      "width": 1,
+      "height": 4
+    }
+  ]
+}
