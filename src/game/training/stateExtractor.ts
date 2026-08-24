@@ -53,3 +53,28 @@ export function encodeState(observation: Observation): string {
     velocityBucket(observation.verticalVelocity),
   ].join(",");
 }
+
+const VECTOR_MODES = ["cube", "ship", "ball"] as const;
+
+/** Mode one-hot + grounded + gravity + 7 scaled scalar features. */
+export const VECTOR_SIZE = VECTOR_MODES.length + 2 + 7;
+
+/**
+ * Continuous feature vector for function approximation. Unlike encodeState's
+ * discretized buckets, this feeds a neural net directly, so features are
+ * scaled to roughly [-1, 1] rather than binned.
+ */
+export function encodeVector(observation: Observation): number[] {
+  return [
+    ...VECTOR_MODES.map((mode) => (observation.mode === mode ? 1 : 0)),
+    observation.grounded,
+    observation.gravity,
+    observation.distanceToHazard / 10,
+    observation.hazardHeight / 2,
+    observation.distanceToGap / 10,
+    observation.gapAhead / 5,
+    observation.surfaceDelta / 5,
+    observation.ceilingAbove / 5,
+    observation.verticalVelocity / 32,
+  ];
+}

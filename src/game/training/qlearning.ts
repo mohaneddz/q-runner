@@ -27,7 +27,8 @@ export const DEFAULT_CONFIG: QLearningConfig = {
   epsilonMin: 0.002,
 };
 
-export interface SerializedAgent {
+export interface SerializedQLearningAgent {
+  algorithm: "qlearning";
   version: 1;
   config: QLearningConfig;
   steps: number;
@@ -35,6 +36,7 @@ export interface SerializedAgent {
 }
 
 export class QLearningAgent {
+  readonly algorithm = "qlearning" as const;
   private table = new Map<string, [number, number]>();
   private config: QLearningConfig;
   private steps = 0;
@@ -57,6 +59,10 @@ export class QLearningAgent {
 
   configure(config: Partial<QLearningConfig>): void {
     this.config = { ...this.config, ...config };
+  }
+
+  getConfig(): QLearningConfig {
+    return { ...this.config };
   }
 
   reset(): void {
@@ -110,8 +116,9 @@ export class QLearningAgent {
     );
   }
 
-  serialize(): SerializedAgent {
+  serialize(): SerializedQLearningAgent {
     return {
+      algorithm: "qlearning",
       version: 1,
       config: this.config,
       steps: this.steps,
@@ -119,7 +126,7 @@ export class QLearningAgent {
     };
   }
 
-  static deserialize(data: SerializedAgent): QLearningAgent {
+  static deserialize(data: SerializedQLearningAgent): QLearningAgent {
     const agent = new QLearningAgent(data.config);
     agent.steps = data.steps;
     for (const [key, zero, one] of data.entries) {

@@ -1,7 +1,8 @@
 import type { Observation } from "@/game/core/types";
 import type { LevelData } from "@/game/level/levelSchema";
+import { deserializeAgent, type RLAgent, type SerializedAgent } from "@/game/training/agent";
 import { TrainingEnv } from "@/game/training/env";
-import { QLearningAgent, type QLearningConfig, type SerializedAgent } from "@/game/training/qlearning";
+import { QLearningAgent } from "@/game/training/qlearning";
 
 export interface TrainerMetrics {
   episode: number;
@@ -26,9 +27,9 @@ const WINDOW = 100;
 /** Steps between clock reads — checking every step dominates the loop. */
 const TIME_CHECK_INTERVAL = 512;
 
-export class Trainer {
+export class Trainer<TAgent extends RLAgent = QLearningAgent> {
   private env: TrainingEnv;
-  private agent: QLearningAgent;
+  private agent: TAgent;
   private observation: Observation;
   private history: EpisodeRecord[] = [];
   private episode = 1;
@@ -37,16 +38,18 @@ export class Trainer {
   private bestProgress = 0;
   private stepsPerSecond = 0;
 
+  // `agent` must match TAgent — the default only ever fires for the plain
+  // `new Trainer(level)` call sites, which always want a QLearningAgent.
   constructor(
     private level: LevelData,
-    agent?: QLearningAgent,
+    agent?: TAgent,
   ) {
     this.env = new TrainingEnv(level);
-    this.agent = agent ?? new QLearningAgent();
+    this.agent = agent ?? (new QLearningAgent() as TAgent);
     this.observation = this.env.reset();
   }
 
-  getAgent(): QLearningAgent {
+  getAgent(): TAgent {
     return this.agent;
   }
 
@@ -61,12 +64,9 @@ export class Trainer {
     return this.level;
   }
 
-  configure(config: Partial<QLearningConfig>): void {
-    this.agent.configure(config);
-  }
-
+  /** Caller is responsible for passing data serialized from a matching algorithm. */
   loadAgent(data: SerializedAgent): void {
-    this.agent = QLearningAgent.deserialize(data);
+    this.agent = deserializeAgent(data) as TAgent;
     this.observation = this.env.reset();
   }
 
