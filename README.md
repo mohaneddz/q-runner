@@ -1,3 +1,5 @@
+![Q-Runner](screenshots/cover.avif)
+
 # Q-Runner
 
 A deterministic browser auto-runner with cube, ship and ball modes, a level editor, an endless
